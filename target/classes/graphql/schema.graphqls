@@ -1,0 +1,97 @@
+#ERRORI POSSIBILI
+interface BaseError {
+    message: String
+}
+
+type InvalidInputError implements BaseError {
+    message: String
+}
+
+type NotFoundError implements BaseError {
+    message: String
+}
+
+type UnknownError implements BaseError {
+    message: String
+}
+
+type NotAllowedError implements BaseError {
+    message: String
+}
+
+
+#TIPI UNION CON ERRORI
+union PiattiPrevResult = PiattoPreview | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
+union PiattoUpResult = PiattoUpload | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
+
+#QUERY
+type Query {
+    ottieniListaPiatti(idPersona: String!): [PiattiPrevResult]
+    ottieniPiatto(idPersona: String!, idPiatto: String!): PiattoUpload
+}
+
+type Mutation {
+    nuovoPiatto(idPersona: String!, piatto: PiattoUploadInput!): String
+}
+
+#SCHEMA
+type Utente{
+    email: String!
+    password: String!
+    isGestore: Boolean
+    tavolo: Session
+    idPersona: IdToken
+}
+
+type IdToken {
+    idToken: ID!
+    cliente: Utente
+}
+
+type Session {
+    idTable: ID!
+    clienti: [Utente]
+}
+
+type Menu {
+    id: ID!
+    nome: String
+    #menu: [SezionePreview]
+    #fasce: [FasciaOraria]
+}
+
+type PiattoPreview{
+    id: ID!
+    numero: Int
+    variante: String
+    nome: String
+    consigliato: Boolean
+    limite: Int
+    #piattoUpload: piattoUpload
+    #sezionePreview: sezionePreview
+}
+
+type PiattoUpload{
+    id: ID!
+    numero: Int
+    variante: String
+    nome: String
+    prezzo: Int
+    immagine: String
+    alt: String
+    allergeni: [String]
+    ingredienti: [String]
+}
+
+#TIPI INPUT
+input PiattoUploadInput{
+    id: ID!
+    numero: Int
+    variante: String
+    nome: String
+    prezzo: Int
+    immagine: String
+    alt: String
+    allergeni: [String]
+    ingredienti: [String]
+}
