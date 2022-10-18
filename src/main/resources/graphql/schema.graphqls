@@ -24,6 +24,8 @@ type NotAllowedError implements BaseError {
 union PiattiPrevResult = PiattoPreview | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
 union PiattoUpResult = PiattoUpload | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
 union MenuResult = Menu | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
+union FasciaOrariaRes = FasciaOraria | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
+union PiattoRes = Piatto | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
 
 #QUERY
 type Query {
@@ -31,6 +33,12 @@ type Query {
     ottieniPiatto(idPersona: String!, idPiatto: String!): PiattoUpResult
     ottieniListaMenu(idPersona: String!): [MenuResult]
     ottieniMenu(idPersona: String!, idMenu: String!): MenuResult
+    #MENU CONTROLLER
+    #Oltre ad essere due con nome uguale, devo capire bene il tipo di
+    #ritorno che non è esattamente un Menu, ma un ArraySezione
+    #ottieniMenu(idMenu: String!, idPersona: String!): MenuResult
+    ottieniListaFasce(idMenu: Int!, idPersona: String!): [FasciaOrariaRes]
+    ottieniListaPreferiti(idMenu: Int!, idPersona: String!): [PiattoRes]
 }
 
 type Mutation {
@@ -40,6 +48,7 @@ type Mutation {
     nuovoMenu(idPersona: String!, name: String!): MenuResult
     aggiornaMenu(idPersona: String!, menu: MenuInput!): MenuResult
     eliminaMenu(idPersona: String!, idMenu: String!): MenuResult
+    eseguiLogin(utente: UtenteInput!): IdToken
 }
 
 #SCHEMA
@@ -91,6 +100,33 @@ type PiattoUpload{
     ingredienti: [String]
 }
 
+type FasciaOraria {
+    id: ID!
+    giorno: String
+    orarioInizio: Int
+    orarioFine: Int
+    menu: Menu
+}
+
+type Piatto {
+    id: ID!
+    numero: Int
+    variante: String
+    nome: String
+    prezzo: Float
+    allergeni: [String]
+    ingredienti: [String]
+    limite: Int
+    valutazioneMedia: Int
+    valutazioneUtente: Int
+    preferito: Boolean
+    ultimoOrdine: String
+    popolare: Boolean
+    consigliato: Boolean
+    immagine: String
+    alt: String
+}
+
 #TIPI INPUT
 input PiattoUploadInput{
     id: ID!
@@ -109,4 +145,16 @@ input MenuInput {
     nome: String
     #menu: [SezionePreview]
     #fasce: [FasciaOraria]
+}
+
+input UtenteInput {
+    email: String!
+    password: String!
+    isGestore: Boolean
+    idPersona: IdTokenInput
+}
+
+input IdTokenInput {
+    idToken: ID!
+    cliente: UtenteInput
 }

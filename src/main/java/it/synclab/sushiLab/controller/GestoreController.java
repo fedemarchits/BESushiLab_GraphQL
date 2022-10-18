@@ -1,7 +1,6 @@
 package it.synclab.sushiLab.controller;
 
-//import it.synclab.sushiLab.constants.ErrorHandler;
-import it.synclab.sushiLab.classes.ListaMenu;
+
 import it.synclab.sushiLab.entity.Menu;
 import it.synclab.sushiLab.errorsHandling.InvalidInputError;
 import it.synclab.sushiLab.errorsHandling.NotAllowedError;
@@ -14,15 +13,12 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
 import it.synclab.sushiLab.service.GestoreService;
 import it.synclab.sushiLab.service.ClientService;
-import it.synclab.sushiLab.entity.PiattoPreview;
 import it.synclab.sushiLab.classes.ListaPiatti;
-import it.synclab.sushiLab.constants.*;
 import it.synclab.sushiLab.entity.PiattoUpload;
 import org.springframework.web.bind.annotation.*;
 

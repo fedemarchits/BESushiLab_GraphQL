@@ -7,15 +7,13 @@ import it.synclab.sushiLab.errorsHandling.NotFoundError;
 import it.synclab.sushiLab.repository.ClientRepository;
 import it.synclab.sushiLab.service.ClientService;
 import it.synclab.sushiLab.utility.Utility;
-import org.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
+
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 
 @Controller
 public class LoginController {
@@ -26,7 +24,7 @@ public class LoginController {
     @Autowired
     private ClientRepository clientiRepository;
 
-    @PostMapping
+    @MutationMapping
     public Object eseguiLogin(@Argument Utente utente){
 
         Utente u = clientiRepository.findById(utente.getEmail()).get();
@@ -51,15 +49,15 @@ public class LoginController {
             IdToken idtoken = new IdToken();
             idtoken.setIdToken(idToken);
             idtoken.setCliente(u);
-            u.setIdPersona(idtoken);
+            //u.setIdPersona(idtoken);
 
-            return u;
+            return idToken;
         }
         if (u.getIdPersona().getIdToken()!=null) {
             //expiresIn = Long.parseLong(Utility.generateString(10, 10, true, false, false));
             //rtrnObject.put("expiresIn", expiresIn);
             //rtrnObject.put("idToken", u.getIdPersona().getIdToken());
-            return u;
+            return u.getIdPersona().getIdToken();
         }
         return new NotFoundError("Utente non trovato.");
     }

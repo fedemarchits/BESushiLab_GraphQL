@@ -438,20 +438,24 @@ public class ClientService{
         blacklistRepository.save(blacklist);
         return true;
     }
-
+    //Viene ritornata una copia del menù con un oggetto ArraySezione
     public ArraySezione ottieniMenu(int idMenu, String idPersona){
+        //Verifico esistenza menu e persona
         if(!menuRepository.existsById(idMenu)) return null;
         if(!idTokenRepository.existsById(idPersona)) return null;
+        //Prendo nella funzione il menu con id = idMenu, e ne copio in list_preview la lista di SezionePreview
         List<SezionePreview> list_preview = menuRepository.findById(idMenu).get().getMenu();
         List<Sezione> list_sezione = new ArrayList<>();
         if(list_preview == null) return null;
         for(int i = 0; i < list_preview.size(); i++){
             Sezione sezione;
             List<Piatto> piatti = new ArrayList<>();
+            //Per ciascun piatto (j) di ciascuna lista (i) lo aggiungo alla lista piatti se non è nullo
             for(int j = 0; j < list_preview.get(i).getPiatti().size(); j++){
                 Piatto piatto = ottienPiatto(idPersona, list_preview.get(i).getPiatti().get(j).getId(), true);
                 if(piatto != null) piatti.add(piatto);
             }
+            //Creo una nuova sezione con i piatti inseriti nel ciclo precedente
             sezione = new Sezione(list_preview.get(i).getNome(), piatti);
             list_sezione.add(sezione);
         }
