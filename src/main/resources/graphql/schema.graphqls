@@ -23,15 +23,23 @@ type NotAllowedError implements BaseError {
 #TIPI UNION CON ERRORI
 union PiattiPrevResult = PiattoPreview | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
 union PiattoUpResult = PiattoUpload | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
+union MenuResult = Menu | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
 
 #QUERY
 type Query {
     ottieniListaPiatti(idPersona: String!): [PiattiPrevResult]
-    ottieniPiatto(idPersona: String!, idPiatto: String!): PiattoUpload
+    ottieniPiatto(idPersona: String!, idPiatto: String!): PiattoUpResult
+    ottieniListaMenu(idPersona: String!): [MenuResult]
+    ottieniMenu(idPersona: String!, idMenu: String!): MenuResult
 }
 
 type Mutation {
-    nuovoPiatto(idPersona: String!, piatto: PiattoUploadInput!): String
+    nuovoPiatto(idPersona: String!, piatto: PiattoUploadInput!): PiattoUpResult
+    eliminaPiatto(idPersona: String!, idPiatto: String!): PiattoUpResult
+    aggiornaPiatto(idPersona: String!, piatto: PiattoUploadInput): PiattoUpResult
+    nuovoMenu(idPersona: String!, name: String!): MenuResult
+    aggiornaMenu(idPersona: String!, menu: MenuInput!): MenuResult
+    eliminaMenu(idPersona: String!, idMenu: String!): MenuResult
 }
 
 #SCHEMA
@@ -94,4 +102,11 @@ input PiattoUploadInput{
     alt: String
     allergeni: [String]
     ingredienti: [String]
+}
+
+input MenuInput {
+    id: ID!
+    nome: String
+    #menu: [SezionePreview]
+    #fasce: [FasciaOraria]
 }
