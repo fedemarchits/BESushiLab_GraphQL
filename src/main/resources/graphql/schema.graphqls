@@ -31,6 +31,8 @@ union MenuCompattoRes = MenuCompatto | NotFoundError | NotAllowedError | Invalid
 union OrdineDettaglioRes = OrdineDettaglio | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
 union OrdineRes = Ordine | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
 union BooleanRes = BooleanC | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
+union UtenteRes = Utente | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
+union IngredientiRes = Ingredienti | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
 
 
 #QUERY
@@ -46,12 +48,15 @@ type Query {
     ottieniListaFasce(idMenu: Int!, idPersona: String!): [FasciaOrariaRes]
     ottieniListaPreferiti(idMenu: Int!, idPersona: String!): [PiattoRes]
     #TAVOLO CONTROLLER
-    ottieniSessione(idTavolo: String!) : MenuCompattoRes
-    ottieniOrdiniPersona(idTavolo: String!, idPersona: String!) : [OrdineDettaglioRes]
-    ottieniOrdiniTavolo(idTavolo: String!, idPersona: String!) : [OrdineDettaglioRes]
-    ottieniGliOrdiniInArrivo(idTavolo: String!, idPersona: String!) : [OrdineDettaglioRes]
-    spostaGliOrdiniInArrivo(idTavolo : String!) : BooleanRes
-    mergeTavolo(idTavolo : String!, body: [OrdineMergeInput]) : BooleanRes
+    ottieniSessione(idTavolo: String!): MenuCompattoRes
+    ottieniOrdiniPersona(idTavolo: String!, idPersona: String!): [OrdineDettaglioRes]
+    ottieniOrdiniTavolo(idTavolo: String!, idPersona: String!): [OrdineDettaglioRes]
+    ottieniGliOrdiniInArrivo(idTavolo: String!, idPersona: String!): [OrdineDettaglioRes]
+    spostaGliOrdiniInArrivo(idTavolo : String!): BooleanRes
+    mergeTavolo(idTavolo : String!, body: [OrdineMergeInput]): BooleanRes
+    #UTENTE CONTROLLER
+    ottieniUtente(idPersona: String!): UtenteRes
+    ottieniBlackList(idPersona: String!, ingredienti: IngredientiInput): IngredientiRes
 }
 
 type Mutation {
@@ -63,9 +68,17 @@ type Mutation {
     eliminaMenu(idPersona: String!, idMenu: String!): MenuResult
     eseguiLogin(utente: UtenteInput!): IdToken
     #TAVOLO CONTROLLER
-    creaSessione(idPersona: String!) : SessionRes
-    chiudiSessione(idTabolo: String!) : SessionRes
-    modificaOrdiniPersona(idTavolo: String!, idPersona: String!, listaOrdini: [OrdineInput]) : [OrdineRes]
+    creaSessione(idPersona: String!): SessionRes
+    chiudiSessione(idTabolo: String!): SessionRes
+    modificaOrdiniPersona(idTavolo: String!, idPersona: String!, listaOrdini: [OrdineInput]): [OrdineRes]
+    #UTENTE CONTROLLER
+    registraUtente(utente: UtenteInput!): Utente
+    modificaStatoPreferiti(idPersona: String!, idPiatto: String!, param: String!): Boolean
+    modificaValutazione(idPersona: String!, idPiatto: String!, param: String!): Boolean
+    recuperoPassword(param: String!): Boolean
+    verificaCodice(param: String!): Boolean
+    reimpostaPassword(body: String!): Boolean
+    aggiornaBlacklist(idPersona: String!, ingredienti: IngredientiInput): Boolean
 }
 
 #SCHEMA
@@ -166,6 +179,11 @@ type Ordine {
 type BooleanC {
     boolean: Boolean!
 }
+
+type Ingredienti {
+    ingredienti: [String]
+}
+
 #TIPI INPUT
 input PiattoUploadInput{
     id: ID!
@@ -217,4 +235,8 @@ input OrdineMergeInput {
     count : Int
     note: String
     idPersona: String
+}
+
+input IngredientiInput {
+    ingredienti: [String]
 }

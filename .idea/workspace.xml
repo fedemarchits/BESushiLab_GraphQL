@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a199ad1a-9a29-4dff-9212-0fcc3326ec95" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/synclab/sushiLab/controller/MenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/synclab/sushiLab/controller/MenuController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/graphql/schema.graphqls" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/graphql/schema.graphqls" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
