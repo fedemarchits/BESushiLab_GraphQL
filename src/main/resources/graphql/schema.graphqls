@@ -26,6 +26,12 @@ union PiattoUpResult = PiattoUpload | NotFoundError | NotAllowedError | InvalidI
 union MenuResult = Menu | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
 union FasciaOrariaRes = FasciaOraria | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
 union PiattoRes = Piatto | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
+union SessionRes = Session | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
+union MenuCompattoRes = MenuCompatto | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
+union OrdineDettaglioRes = OrdineDettaglio | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
+union OrdineRes = Ordine | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
+union BooleanRes = BooleanC | NotFoundError | NotAllowedError | InvalidInputError | UnknownError
+
 
 #QUERY
 type Query {
@@ -39,6 +45,13 @@ type Query {
     #ottieniMenu(idMenu: String!, idPersona: String!): MenuResult
     ottieniListaFasce(idMenu: Int!, idPersona: String!): [FasciaOrariaRes]
     ottieniListaPreferiti(idMenu: Int!, idPersona: String!): [PiattoRes]
+    #TAVOLO CONTROLLER
+    ottieniSessione(idTavolo: String!) : MenuCompattoRes
+    ottieniOrdiniPersona(idTavolo: String!, idPersona: String!) : [OrdineDettaglioRes]
+    ottieniOrdiniTavolo(idTavolo: String!, idPersona: String!) : [OrdineDettaglioRes]
+    ottieniGliOrdiniInArrivo(idTavolo: String!, idPersona: String!) : [OrdineDettaglioRes]
+    spostaGliOrdiniInArrivo(idTavolo : String!) : BooleanRes
+    mergeTavolo(idTavolo : String!, body: [OrdineMergeInput]) : BooleanRes
 }
 
 type Mutation {
@@ -49,6 +62,10 @@ type Mutation {
     aggiornaMenu(idPersona: String!, menu: MenuInput!): MenuResult
     eliminaMenu(idPersona: String!, idMenu: String!): MenuResult
     eseguiLogin(utente: UtenteInput!): IdToken
+    #TAVOLO CONTROLLER
+    creaSessione(idPersona: String!) : SessionRes
+    chiudiSessione(idTabolo: String!) : SessionRes
+    modificaOrdiniPersona(idTavolo: String!, idPersona: String!, listaOrdini: [OrdineInput]) : [OrdineRes]
 }
 
 #SCHEMA
@@ -67,7 +84,6 @@ type IdToken {
 
 type Session {
     idTable: ID!
-    clienti: [Utente]
 }
 
 type Menu {
@@ -127,6 +143,29 @@ type Piatto {
     alt: String
 }
 
+type MenuCompatto {
+    menu: [Menu]
+}
+
+type OrdineDettaglio {
+    piatto: Piatto
+    molteplicita: Int
+    note: [String]
+}
+
+type Ordine {
+    id: ID!
+    count: Int
+    idPiatto: Int
+    note: String
+    inArrivo: Boolean
+    idPersona: IdToken
+    idTavolo: Session
+}
+
+type BooleanC {
+    boolean: Boolean!
+}
 #TIPI INPUT
 input PiattoUploadInput{
     id: ID!
@@ -157,4 +196,25 @@ input UtenteInput {
 input IdTokenInput {
     idToken: ID!
     cliente: UtenteInput
+}
+
+input OrdineInput {
+    id: ID!
+    count: Int
+    idPiatto: Int
+    note: String
+    inArrivo: Boolean
+    idPersona: IdTokenInput
+    idTavolo: SessionInput
+}
+
+input SessionInput {
+    idTable: ID!
+}
+
+input OrdineMergeInput {
+    idPiatto: ID!
+    count : Int
+    note: String
+    idPersona: String
 }

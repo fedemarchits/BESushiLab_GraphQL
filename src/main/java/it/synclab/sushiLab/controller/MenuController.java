@@ -2,24 +2,16 @@ package it.synclab.sushiLab.controller;
 
 import it.synclab.sushiLab.classes.*;
 import it.synclab.sushiLab.entity.FasciaOraria;
-import it.synclab.sushiLab.entity.Menu;
-import it.synclab.sushiLab.entity.PiattoPreview;
-import it.synclab.sushiLab.entity.SezionePreview;
+
 import it.synclab.sushiLab.errorsHandling.NotFoundError;
 import it.synclab.sushiLab.service.ClientService;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.ArrayList;
+import org.springframework.stereotype.Controller;
+
 import java.util.List;
 
 @Controller
